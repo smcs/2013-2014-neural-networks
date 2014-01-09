@@ -1,0 +1,5 @@
+An introduction to neural networks
+Pattern learning with the back-propagation algorithm£º
+
+http://www.ibm.com/developerworks/library/l-neural/index.html?S_TACT=105AGX52&S_CMP=cn-a-l
+
