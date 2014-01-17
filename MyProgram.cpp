@@ -1,12 +1,13 @@
 #include<iostream>
+#include<fstream>
 #include<cmath>
 
 using namespace std;
 
 #define InNode 4
-#define HiddenNode 20
+#define HiddenNode 10
 #define OutNode 1
-#define SampleSize 16
+#define SampleSize 81
 
 
 double Data[SampleSize][InNode];
@@ -52,17 +53,22 @@ public:
            double Input[InNode];
            double Hidden[HiddenNode];
            double Output[OutNode];
+           
            double Target[OutNode];
+           
            double TargetDif[OutNode];
            double HiddenAdjust[HiddenNode];
+           
            double HiddenAct[HiddenNode];
            double OutAct[OutNode];
            for (int Sample=0;Sample<SampleSize;Sample++){
                for (int i=0;i<InNode;i++){
+                   Input[i]=0;
                    Input[i] = Data[Sample][i]; 
                }
                for (int i=0;i<OutNode;i++){
-                   Target[i] = Data[Sample][i];
+                   Target[i]=0;
+                   Target[i] = DataTarget[Sample][i];
                }
                for (int i=0;i<HiddenNode;i++){
                    HiddenAct[i] = 0.0;
@@ -102,13 +108,13 @@ public:
                    }
                    //alpha * s'(a(p,n)) * sum(d(j) * W(n,j)) * X(p,i,n)
                }
-               for (int i=0;i<InNode;i++){
+               for (int i=0;i<OutNode;i++){
                    error=error+fabs(Target[i]-Output[i])*fabs(Target[i]-Output[i]);
                }
                /*
                * Adjust the Threshholds of hiddennodes and outnodes
                */
-               MaxError=error/SampleSize;
+               MaxError=error/2.0;
                for (int i=0;i<HiddenNode;i++){
                    HiddenThresh[i]=HiddenThresh[i]+rate_HiddenThresh*HiddenAdjust[i];
                }
@@ -150,33 +156,34 @@ public:
 };
 
 int main(){
+    ofstream myFile("OutputWeights.txt");
     BPNet BP;
     BP.init();
     int count=0;
     int ActualAnswer[SampleSize];
-    double temp[4]={(double)(1.0/3.0),(double)0.0/3.0,(double)0.0/3.0,(double)(1.0/3.0)};
-    for (int a=0;a<2;a++){
-        for (int b=0;b<2;b++){
-            for (int c=0;c<2;c++){
-                for (int d=0;d<2;d++){
-                    Data[count][0]=a*((double)1.0/3.0);
-                    Data[count][1]=b*((double)1.0/3.0);
-                    Data[count][2]=c*((double)1.0/3.0);
-                    Data[count][3]=d*((double)1.0/3.0);
-                    for (int i=0;i<OutNode;i++){
-                        DataTarget[count][i]=(count*((double)1.0/(SampleSize-1.0)));
-                    } 
+    double temp[4]={2,1,1,2};
+    for (int a=0;a<3;a++){
+        for (int b=0;b<3;b++){
+            for (int c=0;c<3;c++){
+                for (int d=0;d<3;d++){
+                    Data[count][0]=a;
+                    Data[count][1]=b;
+                    Data[count][2]=c;
+                    Data[count][3]=d;
                     ActualAnswer[count]=a*d-b*c;
-                    cout<<DataTarget[count][0]<<endl;
+                    cout<<ActualAnswer[count]<<endl;
                     count++;
                 }
             }
         }
     }
+    for (int i=0;i<SampleSize;i++){
+        DataTarget[i][0]=(double)i*((double)1.0/((double)SampleSize-1.0));
+    } 
     system("PAUSE");
     
     count=0;
-    while(BP.MaxError>0.14)
+    while(BP.MaxError>0.0002)
     {
         count++;
         BP.error=0.0;
@@ -184,19 +191,51 @@ int main(){
         cout<<count<<" "<<"error="<<BP.MaxError<<endl;
     }
     BP.recognize(temp);
-    double min=1000;
-    double diff=0;
+    double min=10000;
+    double diff[SampleSize][OutNode];
     int index=0;
     //cout<<BP.result[0]<<endl;
     for (int i=0;i<SampleSize;i++){
         for (int j=0;j<OutNode;j++){
-            diff=fabs(DataTarget[i][j]-BP.result[j]);
-            cout<<diff<<endl;
-            if (min>diff){
-                          min=diff;
+            diff[i][j]=(double)fabs(DataTarget[i][j]-BP.result[j]);
+            cout<<diff[i][j]<<endl;
+            if (min>diff[i][j]){
+                          min=diff[i][j];
                           index=i;
             }
         }
+    }
+    if (myFile.is_open()){
+        myFile<<"Weights from input to hidden:"<<endl;
+        for (int i=0;i<InNode;i++){
+            for (int j=0;j<HiddenNode;j++){
+                myFile<<BP.HiddenWeight[i][j]<<" ";
+            }
+            myFile<<endl;
+        }
+        myFile<<endl;
+        myFile<<"Wights from hidden to output:"<<endl;
+        for (int i=0;i<HiddenNode;i++){
+            for (int j=0;j<OutNode;j++){
+                myFile<<BP.OutWeight[i][j]<<" ";
+            }
+            myFile<<endl;
+        }
+        myFile<<endl<<"Input-output matching:"<<endl;
+        myFile<<"Input: ";
+        for (int i=0;i<SampleSize;i++){
+            myFile<<"{";
+            for (int j=0;j<InNode;j++){
+                myFile<<Data[i][j];
+                if (j!=InNode-1) myFile<<",";
+            }
+            myFile<<"} ";
+        }
+        myFile<<endl<<"Target: ";
+        for (int i=0;i<SampleSize;i++){
+            myFile<<DataTarget[i][0]<<" | ";
+        }
+        myFile<<endl;
     }
     cout<<index<<" "<<ActualAnswer[index]<<endl;
     system("PAUSE");

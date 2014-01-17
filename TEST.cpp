@@ -4,10 +4,10 @@
 #include<cmath>
 using namespace std;
 
-#define  innode 3  //输入结点数
+#define  innode 4  //输入结点数
 #define  hidenode 10//隐含结点数
 #define  outnode 1 //输出结点数
-#define  trainsample 8//BP训练样本数
+#define  trainsample 81//BP训练样本数
 class BpNet
 {
 public:
@@ -84,10 +84,14 @@ void BpNet::train(double p[trainsample][innode],double t[trainsample][outnode])
 
     for(int isamp=0;isamp<trainsample;isamp++)//循环训练一次样品
     {
-        for(int i=0;i<innode;i++)
+        for(int i=0;i<innode;i++){
+            x[i]=0;
             x[i]=p[isamp][i]; //输入的样本
-        for(int i=0;i<outnode;i++)
+        }
+        for(int i=0;i<outnode;i++){
+            yd[i]=0;
             yd[i]=t[isamp][i]; //期望输出的样本
+        } 
 
         //构造每个样品的输入和输出标准
         for(int j=0;j<hidenode;j++)
@@ -311,18 +315,47 @@ void BpNet::readtrain()
 
 
 //输入样本
-double X[trainsample][innode]= {
-    {0,0,0},{0,0,1},{0,1,0},{0,1,1},{1,0,0},{1,0,1},{1,1,0},{1,1,1}
-    };
+double X[trainsample][innode];
 //期望输出样本
-double Y[trainsample][outnode]={
-    {0},{0.1429},{0.2857},{0.4286},{0.5714},{0.7143},{0.8571},{1.0000}
-    };
+double Y[trainsample][outnode];
 
 int main()
 {
+    
     BpNet bp;
     bp.init();
+    for (int i=0;i<trainsample;i++){
+        Y[i][0]=(double)i*(1.0/80.0);
+        //cout<<Y[i][0]<<endl;
+    }
+    int count=0;
+    for (int a=0;a<3;a++){
+            for (int b=0;b<3;b++){
+                for (int c=0;c<3;c++){
+                    for (int d=0;d<3;d++){
+                    X[count][0]=0.0;
+                    X[count][0]=a;
+                    //cout<<X[count][0]<<" ";
+                    X[count][1]=0.0;
+                    X[count][1]=b;
+                    //cout<<X[count][1]<<" ";
+                    X[count][2]=0.0;
+                    X[count][2]=c;
+                    //cout<<X[count][2]<<" "<<endl;
+                    X[count][3]=0.0;
+                    X[count][3]=d;
+                    count++;
+                    }
+                }
+            }
+    }
+    for(int i=0;i<trainsample;i++){
+            for(int j=0;j<innode;j++){
+                    cout<<X[i][j]<<" ";
+            }
+            cout<<endl;
+    }
+    system("PAUSE");
     int times=0;
     while(bp.error>0.0001)
     {
@@ -332,7 +365,7 @@ int main()
         cout<<"Times="<<times<<" error="<<bp.error<<endl;
     }
     cout<<"trainning complete..."<<endl;
-    double m[innode]={0,1,1};
+    double m[innode]={1,0,0,1};
     double *r=bp.recognize(m);
     for(int i=0;i<outnode;++i)
        cout<<bp.result[i]<<" ";
