@@ -4,8 +4,8 @@
 using namespace std;
 
 #define InNode 4
-#define HiddenNode 50
-#define OutNode 1 
+#define HiddenNode 20
+#define OutNode 1
 #define SampleSize 16
 
 
@@ -84,7 +84,7 @@ public:
                for (int i=0;i<OutNode;i++){
                    TargetDif[i]=(1-Output[i])*Output[i]*(Target[i]-Output[i]); //Find the error of single outnode
                    for (int j=0;j<HiddenNode;j++){
-                       OutWeight[j][i]=OutWeight[j][i]+rate_OutWeight*TargetDif[i]*Output[i];
+                       OutWeight[j][i]=OutWeight[j][i]+rate_OutWeight*TargetDif[i]*Hidden[i];
                    }
                    //alpha * s'(a(p,n)) * (t(p,n) - y(p,n)) * X(p,i,n).
                }
@@ -102,13 +102,13 @@ public:
                    }
                    //alpha * s'(a(p,n)) * sum(d(j) * W(n,j)) * X(p,i,n)
                }
-               for (int i=0;i<OutNode;i++){
+               for (int i=0;i<InNode;i++){
                    error=error+fabs(Target[i]-Output[i])*fabs(Target[i]-Output[i]);
                }
                /*
                * Adjust the Threshholds of hiddennodes and outnodes
                */
-               MaxError=error/3.0;
+               MaxError=error/SampleSize;
                for (int i=0;i<HiddenNode;i++){
                    HiddenThresh[i]=HiddenThresh[i]+rate_HiddenThresh*HiddenAdjust[i];
                }
@@ -154,7 +154,7 @@ int main(){
     BP.init();
     int count=0;
     int ActualAnswer[SampleSize];
-    double temp[4]={(double)(1.0/3.0),(double)(1.0/3.0),(double)(1.0/3.0),(double)(1.0/3.0)};
+    double temp[4]={(double)(1.0/3.0),(double)0.0/3.0,(double)0.0/3.0,(double)(1.0/3.0)};
     for (int a=0;a<2;a++){
         for (int b=0;b<2;b++){
             for (int c=0;c<2;c++){
@@ -163,7 +163,9 @@ int main(){
                     Data[count][1]=b*((double)1.0/3.0);
                     Data[count][2]=c*((double)1.0/3.0);
                     Data[count][3]=d*((double)1.0/3.0);
-                    DataTarget[count][0]=(count*((double)1.0/(SampleSize-1.0)));
+                    for (int i=0;i<OutNode;i++){
+                        DataTarget[count][i]=(count*((double)1.0/(SampleSize-1.0)));
+                    } 
                     ActualAnswer[count]=a*d-b*c;
                     cout<<DataTarget[count][0]<<endl;
                     count++;
@@ -174,7 +176,7 @@ int main(){
     system("PAUSE");
     
     count=0;
-    while(BP.MaxError>0.05)
+    while(BP.MaxError>0.14)
     {
         count++;
         BP.error=0.0;
@@ -185,12 +187,15 @@ int main(){
     double min=1000;
     double diff=0;
     int index=0;
+    //cout<<BP.result[0]<<endl;
     for (int i=0;i<SampleSize;i++){
-        diff=fabs(DataTarget[i][0]-BP.result[0]);
-        cout<<diff<<endl;
-        if (min>diff){
-                      min=diff;
-                      index=i;
+        for (int j=0;j<OutNode;j++){
+            diff=fabs(DataTarget[i][j]-BP.result[j]);
+            cout<<diff<<endl;
+            if (min>diff){
+                          min=diff;
+                          index=i;
+            }
         }
     }
     cout<<index<<" "<<ActualAnswer[index]<<endl;
