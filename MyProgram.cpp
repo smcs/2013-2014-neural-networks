@@ -7,7 +7,7 @@ using namespace std;
 #define InNode 4
 #define HiddenNode 10
 #define OutNode 1
-#define SampleSize 81
+#define SampleSize 256
 
 
 double Data[SampleSize][InNode];
@@ -161,11 +161,11 @@ int main(){
     BP.init();
     int count=0;
     int ActualAnswer[SampleSize];
-    double temp[4]={2,1,1,2};
-    for (int a=0;a<3;a++){
-        for (int b=0;b<3;b++){
-            for (int c=0;c<3;c++){
-                for (int d=0;d<3;d++){
+    double temp[4]={1,0,0,1};
+    for (int a=0;a<4;a++){
+        for (int b=0;b<4;b++){
+            for (int c=0;c<4;c++){
+                for (int d=0;d<4;d++){
                     Data[count][0]=a;
                     Data[count][1]=b;
                     Data[count][2]=c;
@@ -183,7 +183,7 @@ int main(){
     system("PAUSE");
     
     count=0;
-    while(BP.MaxError>0.0002)
+    while(BP.MaxError>0.0001                                              )
     {
         count++;
         BP.error=0.0;
