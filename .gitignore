@@ -1,5 +1,16 @@
+# Java binaries #
 *.class
 */bin/*
+
+# C/C++ binaries #
+*/Debug/*
+*.o
+*.d
+*.mk
+*.exe
+
+# Python binaries #
+*.pyc
 
 # Package Files #
 *.jar
