@@ -41,7 +41,7 @@ class NN2(NN):
 
     def compare(self, targets, activations):
         matches = 0
-        print "Targets:", targets, "-- Errors:",
+        print 'Targets:', targets, '-- Errors:',
         for n in range(len(targets)):
             error = abs(targets[n]-activations[n])
             print '(%.3f' % error,
