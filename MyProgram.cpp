@@ -161,7 +161,10 @@ int main(){
     BP.init();
     int count=0;
     int ActualAnswer[SampleSize];
-    double temp[4]={1,0,0,1};
+    double temp[4]={0,0,0,0};
+    for (int i=0;i<InNode;i++){
+        cin>>temp[i];
+    } 
     for (int a=0;a<4;a++){
         for (int b=0;b<4;b++){
             for (int c=0;c<4;c++){
@@ -171,7 +174,6 @@ int main(){
                     Data[count][2]=c;
                     Data[count][3]=d;
                     ActualAnswer[count]=a*d-b*c;
-                    cout<<ActualAnswer[count]<<endl;
                     count++;
                 }
             }
@@ -183,7 +185,7 @@ int main(){
     system("PAUSE");
     
     count=0;
-    while(BP.MaxError>0.0001                                              )
+    while(BP.MaxError>0.000085)
     {
         count++;
         BP.error=0.0;
