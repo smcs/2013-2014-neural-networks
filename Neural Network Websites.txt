@@ -14,3 +14,9 @@ http://herdagdelen.com/wp-content/uploads/2011/04/backpropagation1999.pdf
 
 Neural Networks on C#
 http://www.codeproject.com/Articles/16447/Neural-Networks-on-C
+
+Elastic Map Wiki:
+http://en.wikipedia.org/wiki/Elastic_map
+
+Elastic Map & TSP:
+http://research.microsoft.com/pubs/75562/DurbinSzeliskiYuille-NC89.pdf
