@@ -20,3 +20,6 @@ http://en.wikipedia.org/wiki/Elastic_map
 
 Elastic Map & TSP:
 http://research.microsoft.com/pubs/75562/DurbinSzeliskiYuille-NC89.pdf
+
+Application on molecular biology (a review inside)
+http://arxiv.org/pdf/1001.1122v2.pdf
