@@ -26,3 +26,20 @@ http://arxiv.org/pdf/1001.1122v2.pdf
 
 NELL
 http://rtw.ml.cmu.edu/rtw/overview
+
+Fundamentals of Artificial Neural Networks
+by Mohamad H. Hassoun
+http://neuron.eng.wayne.edu/tarek/MITbook/t_contents.html
+
+Universal approximation theorem
+http://cstheory.stackexchange.com/questions/17545/universal-approximation-theorem-neural-networks
+
+Machine Learning Course
+http://work.caltech.edu/lectures.html#lectures
+
+A pretty good summarization of BP
+http://www.quora.com/Artificial-Neural-Networks/How-do-artificial-neural-networks-learn
+
+
+
+
