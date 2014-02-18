@@ -1,6 +1,7 @@
 import java.util.*;
+import java.io.*;
 
-public class BackP {
+class BPNet {
 
 
 	public int InNode=4;
@@ -50,15 +51,15 @@ public class BackP {
 	               OutThresh[i]=(random.nextDouble()*2)-1;
 	           }
 	      }
-	public void train(){
-	         private double[] Input = new double[InNode];
-	         private double[] Hidden = new double[HiddenNode];
-	         private double[] Output = new double[OutNode];
-	         private double[] Target = new double[OutNode];
-	         private double[] TargetDif = new double[OutNode];
-	         private double[] HiddenAdjust = new double[HiddenNode];
-	         private double[] HiddenAct = new double[HiddenNode];
-	         private double[] OutAct = new double[OutNode];
+	private void train(){
+	         double[] Input = new double[InNode];
+	         double[] Hidden = new double[HiddenNode];
+	         double[] Output = new double[OutNode];
+	         double[] Target = new double[OutNode];
+	         double[] TargetDif = new double[OutNode];
+	         double[] HiddenAdjust = new double[HiddenNode];
+	         double[] HiddenAct = new double[HiddenNode];
+	         double[] OutAct = new double[OutNode];
 	           
 	         
 	           for (int Sample=0;Sample<SampleSize;Sample++){
@@ -123,16 +124,17 @@ public class BackP {
 	                   //cout<<OutThresh[i];
 	               }
 	           }
+	           }
 	
 	
 	      
-	     public void recognize(double[] data){
-	    
-	    	 private double[] Input = new double[InNode];
-	    	 private double[] Hidden = new double[HiddenNode];
-	    	 private double[] Output = new double[OutNode];
-	    	 private double[] actHidden = new double[HiddenNode];
-	    	 private double[] actOut = new double[OutNode];
+	     private void recognize(double[] data){
+	    	 double[] Input = new double[InNode];
+	    	 double[] Hidden = new double[HiddenNode];
+	    	 double[] Output = new double[OutNode];
+	    	 
+	    	 double[] actHidden = new double[HiddenNode];
+	    	 double[] actOut = new double[OutNode];
 	    	 
 	             for (int i=0;i<InNode;i++){
 	                 Input[i]=data[i];
@@ -155,22 +157,24 @@ public class BackP {
 	                 result[i]=Output[i];
 	             }
 	     
-	}}
+	}
 
 
-	public void int main(){
-	    ofstream myFile("OutputWeights.txt");
-	    BPNet BP;
+	public void main(){
+		double[] ActualAnswer = new double[256];
+		
+	    //ofstream myFile("OutputWeights.txt");
+	    BPNet BP = null;
 	    BP.init();
 	    int count=0;
-	    int ActualAnswer[SampleSize];
 	    
-	    double temp[4]={0,0,0,0};
-	    double temp= new double[4]{0,0,0,0};
+	    double temp[]={0,0,0,0};
+
 	    
-	    for (int i=0;i<InNode;i++){
-	        cin>>temp[i];
-	    } 
+	    
+	    //for (int i=0;i<InNode;i++){
+	    //    cin>>temp[i];
+	    //} 
 	    for (int a=0;a<4;a++){
 	        for (int b=0;b<4;b++){
 	            for (int c=0;c<4;c++){
@@ -188,7 +192,7 @@ public class BackP {
 	    for (int i=0;i<SampleSize;i++){
 	        DataTarget[i][0]=(double)i*((double)1.0/((double)SampleSize-1.0));
 	    } 
-	    system("PAUSE");
+	    //system("PAUSE");
 	    
 	    count=0;
 	    while(BP.MaxError>0.000085)
@@ -196,23 +200,25 @@ public class BackP {
 	        count++;
 	        BP.error=0.0;
 	        BP.train();
-	        cout<<count<<" "<<"error="<<BP.MaxError<<endl;
+	        //cout<<count<<" "<<"error="<<BP.MaxError<<endl;
 	    }
 	    BP.recognize(temp);
 	    double min=10000;
-	    double diff[SampleSize][OutNode];
+	    double[][] diff= new double[SampleSize][OutNode];
 	    int index=0;
 	    //cout<<BP.result[0]<<endl;
 	    for (int i=0;i<SampleSize;i++){
 	        for (int j=0;j<OutNode;j++){
-	            diff[i][j]=(double)fabs(DataTarget[i][j]-BP.result[j]);
-	            cout<<diff[i][j]<<endl;
+	            diff[i][j]=Math.abs(DataTarget[i][j]-BP.result[j]);
+	            //cout<<diff[i][j]<<endl;
 	            if (min>diff[i][j]){
 	                          min=diff[i][j];
 	                          index=i;
 	            }
 	        }
 	    }
+	    
+	    /*
 	    if (myFile.is_open()){
 	        myFile<<"Weights from input to hidden:"<<endl;
 	        for (int i=0;i<InNode;i++){
@@ -248,7 +254,7 @@ public class BackP {
 	    cout<<index<<" "<<ActualAnswer[index]<<endl;
 	    system("PAUSE");
 	    return 0;
-	
-
+	*/
+	}
 
 }

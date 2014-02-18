@@ -1,0 +1,25 @@
+An introduction to neural networks
+Pattern learning with the back-propagation algorithm£º
+
+http://www.ibm.com/developerworks/library/l-neural/index.html?S_TACT=105AGX52&S_CMP=cn-a-l
+
+
+ON THE PROBLEM OF LOCAL MINIMA IN BACKPROPAGATION
+http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.54.1507&rep=rep1&type=pdf
+
+
+A Solution to the Problem of Local Minima in Backpropagation Algorithm
+http://herdagdelen.com/wp-content/uploads/2011/04/backpropagation1999.pdf
+
+
+Neural Networks on C#
+http://www.codeproject.com/Articles/16447/Neural-Networks-on-C
+
+Elastic Map Wiki:
+http://en.wikipedia.org/wiki/Elastic_map
+
+Elastic Map & TSP:
+http://research.microsoft.com/pubs/75562/DurbinSzeliskiYuille-NC89.pdf
+
+Application on molecular biology (a review inside)
+http://arxiv.org/pdf/1001.1122v2.pdf
