@@ -38,7 +38,7 @@ class BPNet {
 	public void init(){
 	           for (int i=0;i<InNode;i++){
 	               for (int j=0;j<HiddenNode;j++){
-	                   HiddenWeight[i][j] = (random.nextDouble()*2)-1;
+	                   HiddenWeight[i][j] = (random.nextDouble()*2)-1; //-1 to 1
 	               }
 	           }
 	           for (int i=0;i<HiddenNode;i++){
@@ -60,7 +60,6 @@ class BPNet {
 	         double[] HiddenAdjust = new double[HiddenNode];
 	         double[] HiddenAct = new double[HiddenNode];
 	         double[] OutAct = new double[OutNode];
-	           
 	         
 	           for (int Sample=0;Sample<SampleSize;Sample++){
 	               for (int i=0;i<InNode;i++){
@@ -190,7 +189,7 @@ class BPNet {
 	        }
 	    }
 	    for (int i=0;i<SampleSize;i++){
-	        DataTarget[i][0]=(double)i*((double)1.0/((double)SampleSize-1.0));
+	        DataTarget[i][0]=(double)i*(1.0/((double)SampleSize-1.0)); //??
 	    } 
 	    //system("PAUSE");
 	    
@@ -201,16 +200,21 @@ class BPNet {
 	        BP.error=0.0;
 	        BP.train();
 	        //cout<<count<<" "<<"error="<<BP.MaxError<<endl;
+	        System.out.println("error "+ error);
 	    }
 	    BP.recognize(temp);
 	    double min=10000;
 	    double[][] diff= new double[SampleSize][OutNode];
 	    int index=0;
 	    //cout<<BP.result[0]<<endl;
+	    System.out.println("determinant "+ BP.result[0]);
+	    
 	    for (int i=0;i<SampleSize;i++){
 	        for (int j=0;j<OutNode;j++){
 	            diff[i][j]=Math.abs(DataTarget[i][j]-BP.result[j]);
 	            //cout<<diff[i][j]<<endl;
+	            System.out.println("difference["+ i +","+ j + "]: " + diff[i][j]);
+	            
 	            if (min>diff[i][j]){
 	                          min=diff[i][j];
 	                          index=i;
