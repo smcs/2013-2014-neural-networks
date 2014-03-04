@@ -1,5 +1,7 @@
 package std;
 
+import ij.io.*;
+
 public class Main {
 
 	/**
