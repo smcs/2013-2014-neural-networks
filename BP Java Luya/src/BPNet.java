@@ -233,7 +233,9 @@ public class BPNet {
 			BP.error = 0.0;
 			BP.train();
 			// cout<<count<<" "<<"error="<<BP.MaxError<<endl;
-			System.out.println("error " + BP.error);
+			if (count mod 2000 == 0){
+				System.out.println("error " + BP.error);
+			}
 		}
 		BP.recognize(temp);
 		double min = 10000;
