@@ -1,6 +1,7 @@
 package std;
 
 import ij.io.*;
+import ij.process.*;
 
 public class Main {
 
@@ -9,6 +10,8 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		ImageReader reader = new ImageReader("A.png");
+		BinaryProcessor bufferImage = new BinaryProcessor();
 	}
 
 }
