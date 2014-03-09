@@ -1,7 +1,9 @@
 package std;
 
+import ij.ImagePlus;
 import ij.io.*;
 import ij.process.*;
+import ij.plugin.*;
 
 public class Main {
 
@@ -10,8 +12,9 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		ImageReader reader = new ImageReader("A.png");
-		BinaryProcessor bufferImage = new BinaryProcessor();
+		Opener opener = new Opener();
+		ImagePlus image = new ImagePlus();
+		image = opener.openImage("A.PNG");
+		image.show();
 	}
-
 }
