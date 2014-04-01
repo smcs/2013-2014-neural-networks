@@ -228,7 +228,7 @@ public class BPNet {
 		// system("PAUSE");
 
 		count = 0;
-		while (BP.MaxError > 0.00085) {
+		while (BP.MaxError > 0.000085) {
 			count++;
 			BP.error = 0.0;
 			BP.train();
