@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;images&apos; to &apos;Letter Recon&apos;&#x0D;&#x0A;- Original project: &apos;ImageJ as a Library&apos;&#x0D;&#x0A;- Destination element: &apos;Letter Recon&apos;&#x0D;&#x0A;- Original element: &apos;images&apos;" description="Copy folder" destination="=Letter Recon" element1="images" files="0" flags="589830" folders="1" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1396533983672" units="0" version="1.0"/>
+</session>
