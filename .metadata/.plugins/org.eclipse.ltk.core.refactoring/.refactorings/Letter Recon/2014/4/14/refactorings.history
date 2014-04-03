@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete 9 elements from project &apos;Letter Recon&apos;&#x0D;&#x0A;- Original project: &apos;Letter Recon&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     ij&#x0D;&#x0A;     macros&#x0D;&#x0A;     META-INF&#x0D;&#x0A;     about.jpg&#x0D;&#x0A;     IJ_Props.txt&#x0D;&#x0A;     JavaScriptEvaluator.class&#x0D;&#x0A;     MacAdapter.class&#x0D;&#x0A;     MacClipboard.class&#x0D;&#x0A;     microscope.gif" description="Delete elements" element1="META-INF" element2="about.jpg" element3="IJ_Props.txt" element4="ij" element5="macros" element6="JavaScriptEvaluator.class" element7="microscope.gif" element8="MacAdapter.class" element9="MacClipboard.class" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="9" stamp="1396533557086" subPackages="false" version="1.0"/>
+</session>
