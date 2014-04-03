@@ -15,3 +15,11 @@
 # Package Files #
 *.war
 *.ear
+.metadata/.mylyn/repositories.xml.zip
+.metadata/.mylyn/tasks.xml.zip
+*.zip
+*.zip
+.metadata/.mylyn/tasks.xml.zip
+.metadata/.plugins/org.eclipse.epp.usagedata.recording/usagedata.csv
+.metadata/.plugins/org.eclipse.epp.usagedata.recording/usagedata.csv
+.metadata/.plugins/org.eclipse.epp.usagedata.recording/usagedata.csv
