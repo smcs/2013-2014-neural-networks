@@ -9,6 +9,8 @@ import javax.imageio.ImageIO;
 
 import ij.*;
 import ij.io.*;
+import ij.process.BinaryProcessor;
+import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 
 public class Main {
@@ -40,38 +42,42 @@ public class Main {
 		
 		/* convert the current image to 8-bit -- calling the command by its exact name in the menu */
 		IJ.run("8-bit");
-		
 		try{
-		cropAndResize(image, 400, 100);
+			cropAndResizeSkeletonize(image, 200, 200);
 		} catch (IOException e) {
 			System.err.println("IOException: " + e.getMessage());
 		}
+		
 	}
 		
-		public static void cropAndResize(ImagePlus imp, int targetWidth, int targetHeight) throws IOException {
+		public static void cropAndResizeSkeletonize(ImagePlus imp, int targetWidth, int targetHeight) throws IOException {
 		    ImageProcessor ip = imp.getProcessor();
-		    System.out.println("size1: "+ip.getWidth()+"x"+ip.getHeight());
+		    //System.out.println("size1: "+ip.getWidth()+"x"+ip.getHeight());
 		    ip.setInterpolationMethod(ImageProcessor.BILINEAR);
-		    ip = ip.resize(targetWidth * 2, targetHeight * 2);
-		    System.out.println("size2: "+ip.getWidth()+"x"+ip.getHeight());
+		    //System.out.println("size2: "+ip.getWidth()+"x"+ip.getHeight());
 		 
 		    int[] whereToCrop = findBoundary(ip);
 		    
 		    
 		    int cropX = whereToCrop[2];
 		    int cropY = whereToCrop[0];
-		    targetWidth = whereToCrop[4];
-		    targetHeight = whereToCrop[5];
+		    int tWidth = whereToCrop[4];
+		    int tHeight = whereToCrop[5];
 		    
-		    ip.setRoi(cropX, cropY, targetWidth, targetHeight);
+		    ip.setRoi(cropX, cropY, tWidth, tHeight);
+		    System.out.println(cropX + " " + cropY + " " + tWidth + " " + tHeight);
 		    ip = ip.crop();
-		    System.out.println("size3: "+ip.getWidth()+"x"+ip.getHeight());
+		    ip = ip.resize(targetWidth * 2, targetHeight * 2);
+		    //System.out.println("size3: "+ip.getWidth()+"x"+ip.getHeight());
 		    BufferedImage croppedImage = ip.getBufferedImage();
 		 
-		    System.out.println("size4: "+ip.getWidth()+"x"+ip.getHeight());
-		    new ImagePlus("croppedImage", croppedImage).show();
+		    //System.out.println("size4: "+ip.getWidth()+"x"+ip.getHeight());
+		    //new ImagePlus("croppedImage", croppedImage).show();
 		 
 		    ImageIO.write(croppedImage, "jpg", new File("cropped.jpg"));
+		    BinaryProcessor bip = new BinaryProcessor(new ByteProcessor(croppedImage));
+		    bip.skeletonize();
+		    new ImagePlus("SkeletonizedImage", bip.getBufferedImage()).show();
 		  }
 	
 		
@@ -86,7 +92,7 @@ public class Main {
             
             for (int y=0; y<imp.getHeight(); y++) { 
                     for (int x=0; x<imp.getWidth(); x++) { 
-                            if(imp.get(x, y) == 255) { 
+                            if(imp.get(x, y) != 255) { 
                                     maxY = y; 
                                 break; 
                             } 
@@ -95,7 +101,7 @@ public class Main {
             
             for (int x=0; x<imp.getWidth(); x++) { 
                     for (int y=0; y<imp.getHeight(); y++) { 
-                            if(imp.get(x, y) == 255) { 
+                            if(imp.get(x, y) != 255) { 
                                     maxX = x; 
                                 break; 
                             } 
@@ -104,7 +110,7 @@ public class Main {
             
             for (int y=imp.getHeight()-1; y>=0; y--) { 
                     for (int x=0; x<imp.getWidth(); x++) { 
-                            if(imp.get(x, y) == 255) { 
+                            if(imp.get(x, y) != 255) { 
                                     minY = y; 
                                 break; 
                             } 
@@ -114,15 +120,15 @@ public class Main {
             
             for (int x=imp.getWidth()-1; x>=0; x--) { 
                     for (int y=0; y<imp.getHeight(); y++) { 
-                            if(imp.get(x, y) == 255) { 
+                            if(imp.get(x, y) != 255) { 
                                     minX = x; 
                                 break; 
                             } 
                     } 
             } 
             
-            int newWidth = (imp.getWidth()-(imp.getWidth()-maxX-1)); 
-            int newHeight = (imp.getHeight()-(imp.getHeight()-maxY-1)); 
+            int newWidth = maxX-minX; 
+            int newHeight = maxY-minY; 
             
             int[] boundary =  {minY, maxY, minX, maxX, newWidth, newHeight};
             
