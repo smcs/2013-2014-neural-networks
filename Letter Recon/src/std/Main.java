@@ -14,18 +14,24 @@ import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 
 public class Main {
-
+	public static int grid[][] = new int[20][20];
 	public static void main(String[] args) {
 		/*
 		 * An opener is just a utility object to open images -- it could easily
 		 * be connected to an open dialog instead of a hard-coded file path
 		 */
+		for (int i=0;i<20;i++){
+			for (int j=0;j<20;j++){
+				grid[i][j]=0;
+			}
+			
+		}
 		Opener opener = new Opener();
 
 		/* An ImagePlus is an object that represents the loaded image */
 		//ImagePlus a = opener.openImage("images/A.png");
 		/* An ImagePlus is an object that represents the loaded image. IJ is the ImageJ application. */
-		ImagePlus image = IJ.openImage("images/A.png");
+		ImagePlus image = IJ.openImage("images/C.png");
 		/* display the image we're working with in its own window -- this also puts ImageJ's focus on this image, so that subsequent commands will run on this image. */
 		image.show();
 		
@@ -78,6 +84,13 @@ public class Main {
 		    BinaryProcessor bip = new BinaryProcessor(new ByteProcessor(croppedImage));
 		    bip.skeletonize();
 		    new ImagePlus("SkeletonizedImage", bip.getBufferedImage()).show();
+		    toGrid(bip);
+		    for (int i=0;i<20;i++){
+				for (int j=0;j<20;j++){
+					System.out.print(grid[i][j] + " ");
+				}
+				System.out.println();
+			}
 		  }
 	
 		
@@ -132,17 +145,16 @@ public class Main {
             
             int[] boundary =  {minY, maxY, minX, maxX, newWidth, newHeight};
             
-            return boundary;
-            
-            //IJ.run(imp, "Canvas Size...", "width="+newWidth+" height="+newHeight+" position=Top-Left zero"); 
-            //IJ.run(imp, "Canvas Size...", "width="+(newWidth-minX)+" height="+(newHeight-minY)+" position=Bottom-Right zero"); 
-            
-            /*IJ.write("New Width: "+newWidth); 
-            IJ.write("New Height: "+newHeight); 
-            
-            IJ.write("found min Y at: " + minY + "\n"); 
-            IJ.write("found max Y at: " + maxY + "\n"); 
-            IJ.write("found min X at: " + minX + "\n"); 
-            IJ.write("found max X at: " + maxX + "\n");*/ 
-} 
+            return boundary;           
+        } 
+		public static void toGrid(BinaryProcessor imp) { 
+			int unit=(int)(imp.getWidth()/20);
+			for (int i=0;i<imp.getWidth();i++){
+				for (int j=0;j<imp.getHeight();j++){
+					if (imp.getPixel(i, j)!=255){
+						grid[(int)(i/unit)][(int)(j/unit)]=1;
+					}
+				}
+			}
+		}
 }
