@@ -24,14 +24,13 @@ public class Main {
 			for (int j=0;j<20;j++){
 				grid[i][j]=0;
 			}
-			
 		}
 		Opener opener = new Opener();
 
 		/* An ImagePlus is an object that represents the loaded image */
 		//ImagePlus a = opener.openImage("images/A.png");
 		/* An ImagePlus is an object that represents the loaded image. IJ is the ImageJ application. */
-		ImagePlus image = IJ.openImage("images/C.png");
+		ImagePlus image = IJ.openImage("images/E.png");
 		/* display the image we're working with in its own window -- this also puts ImageJ's focus on this image, so that subsequent commands will run on this image. */
 		image.show();
 		
@@ -73,7 +72,7 @@ public class Main {
 		    ip.setRoi(cropX, cropY, tWidth, tHeight);
 		    System.out.println(cropX + " " + cropY + " " + tWidth + " " + tHeight);
 		    ip = ip.crop();
-		    ip = ip.resize(targetWidth * 2, targetHeight * 2);
+		    //ip = ip.resize(tWidth * 5, tHeight * 5);
 		    //System.out.println("size3: "+ip.getWidth()+"x"+ip.getHeight());
 		    BufferedImage croppedImage = ip.getBufferedImage();
 		 
@@ -148,11 +147,13 @@ public class Main {
             return boundary;           
         } 
 		public static void toGrid(BinaryProcessor imp) { 
-			int unit=(int)(imp.getWidth()/20);
+			double unitx=imp.getWidth()/20.0;
+			double unity=imp.getHeight()/20.0;
+			System.out.println(unitx + " " + unity);
 			for (int i=0;i<imp.getWidth();i++){
 				for (int j=0;j<imp.getHeight();j++){
 					if (imp.getPixel(i, j)!=255){
-						grid[(int)(i/unit)][(int)(j/unit)]=1;
+						grid[(int)(i/unitx)][(int)(j/unity)]=1;
 					}
 				}
 			}
