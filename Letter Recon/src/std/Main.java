@@ -14,6 +14,8 @@ import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 
 public class Main {
+	public static double xCentroid;
+	public static double yCentroid;
 	public static int grid[][] = new int[20][20];
 	public static void main(String[] args) {
 		/*
@@ -52,6 +54,11 @@ public class Main {
 		} catch (IOException e) {
 			System.err.println("IOException: " + e.getMessage());
 		}
+		
+		xCentroid=centroid(grid)[0];
+		yCentroid=centroid(grid)[1];
+		System.out.println("xCentroid:"+xCentroid+" yCentroid:"+yCentroid);
+		
 		
 	}
 		
@@ -157,5 +164,19 @@ public class Main {
 					}
 				}
 			}
+		}
+		
+		public static double[] centroid(int[][] grid){
+			double xSum=0.0,ySum=0.0;
+			for (int i=0;i<20;i++){
+				for (int j=0;j<20;j++){
+					xSum+=grid[i][j]*i;
+					ySum+=grid[i][j]*j;
+				}
+			}
+			xSum=xSum/20;
+			ySum=ySum/20;
+			double[] CentroidValue={xSum,ySum};
+			return CentroidValue;
 		}
 }
