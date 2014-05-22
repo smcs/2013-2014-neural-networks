@@ -16,6 +16,7 @@ import ij.process.ImageProcessor;
 public class Main {
 	public static double xCentroid;
 	public static double yCentroid;
+	public static double aspectRatio;
 	public static int grid[][] = new int[20][20];
 	public static void main(String[] args) {
 		/*
@@ -32,7 +33,7 @@ public class Main {
 		/* An ImagePlus is an object that represents the loaded image */
 		//ImagePlus a = opener.openImage("images/A.png");
 		/* An ImagePlus is an object that represents the loaded image. IJ is the ImageJ application. */
-		ImagePlus image = IJ.openImage("images/E.png");
+		ImagePlus image = IJ.openImage("images/C.png");
 		/* display the image we're working with in its own window -- this also puts ImageJ's focus on this image, so that subsequent commands will run on this image. */
 		image.show();
 		
@@ -79,6 +80,8 @@ public class Main {
 		    ip.setRoi(cropX, cropY, tWidth, tHeight);
 		    System.out.println(cropX + " " + cropY + " " + tWidth + " " + tHeight);
 		    ip = ip.crop();
+		    aspectRatio=(double)ip.getBufferedImage().getWidth()/(double)ip.getBufferedImage().getHeight();
+		    System.out.println("Aspect Ratio: " + aspectRatio);
 		    //ip = ip.resize(tWidth * 5, tHeight * 5);
 		    //System.out.println("size3: "+ip.getWidth()+"x"+ip.getHeight());
 		    BufferedImage croppedImage = ip.getBufferedImage();
@@ -168,14 +171,19 @@ public class Main {
 		
 		public static double[] centroid(int[][] grid){
 			double xSum=0.0,ySum=0.0;
+			int count=0;
 			for (int i=0;i<20;i++){
 				for (int j=0;j<20;j++){
+					if (grid[i][j]==1){
+						count=count+1;
+					}
 					xSum+=grid[i][j]*i;
 					ySum+=grid[i][j]*j;
 				}
 			}
-			xSum=xSum/20;
-			ySum=ySum/20;
+			System.out.println(xSum +" "+ ySum);
+			xSum=xSum/count;
+			ySum=ySum/count;
 			double[] CentroidValue={xSum,ySum};
 			return CentroidValue;
 		}
