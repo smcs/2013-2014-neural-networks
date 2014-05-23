@@ -33,7 +33,7 @@ public class Main {
 		/* An ImagePlus is an object that represents the loaded image */
 		//ImagePlus a = opener.openImage("images/A.png");
 		/* An ImagePlus is an object that represents the loaded image. IJ is the ImageJ application. */
-		ImagePlus image = IJ.openImage("images/C.png");
+		ImagePlus image = IJ.openImage("images/U.png");
 		/* display the image we're working with in its own window -- this also puts ImageJ's focus on this image, so that subsequent commands will run on this image. */
 		image.show();
 		
@@ -59,8 +59,7 @@ public class Main {
 		xCentroid=centroid(grid)[0];
 		yCentroid=centroid(grid)[1];
 		System.out.println("xCentroid:"+xCentroid+" yCentroid:"+yCentroid);
-		
-		
+		System.out.println(nPixel(image.getProcessor()));
 	}
 		
 		public static void cropAndResizeSkeletonize(ImagePlus imp, int targetWidth, int targetHeight) throws IOException {
@@ -82,8 +81,8 @@ public class Main {
 		    ip = ip.crop();
 		    aspectRatio=(double)ip.getBufferedImage().getWidth()/(double)ip.getBufferedImage().getHeight();
 		    System.out.println("Aspect Ratio: " + aspectRatio);
-		    //ip = ip.resize(tWidth * 5, tHeight * 5);
 		    //System.out.println("size3: "+ip.getWidth()+"x"+ip.getHeight());
+		    ip = ip.resize(100, 100);
 		    BufferedImage croppedImage = ip.getBufferedImage();
 		 
 		    //System.out.println("size4: "+ip.getWidth()+"x"+ip.getHeight());
@@ -100,9 +99,22 @@ public class Main {
 				}
 				System.out.println();
 			}
+		    System.out.println("MeanSquareHorizontal: " +MeanSquareHorizontal(bip));
+		    System.out.println("MeanSquareVertical: " + MeanSquareVertical(bip));
 		  }
 	
-		
+		public static double nPixel(ImageProcessor imp) {
+			imp.resize(100,100);
+			double count=0.0;
+			for (int i=0;i<imp.getWidth();i++){
+				for (int j=0;j<imp.getHeight();j++){
+					if (imp.get(i,j) != 255){
+						count=count+1.0;
+					}
+				}
+			}
+			return count/10000;
+		}
 		
 		public static int[] findBoundary(ImageProcessor imp) { 
             Rectangle r = imp.getRoi(); 
@@ -181,10 +193,116 @@ public class Main {
 					ySum+=grid[i][j]*j;
 				}
 			}
-			System.out.println(xSum +" "+ ySum);
 			xSum=xSum/count;
 			ySum=ySum/count;
 			double[] CentroidValue={xSum,ySum};
 			return CentroidValue;
 		}
+		
+		public static double MeanSquareHorizontal(BinaryProcessor imp){
+			double HorizontalMeanSquare=0.0;
+			int[] temp=new int[imp.getWidth()];
+			int halfHeight=imp.getHeight()/2;
+			int p1=0,p2=0,ep=imp.getWidth()-1;;
+			int count=0;
+			int flag=0;
+			for (int i=0;i<imp.getWidth();i++){
+				temp[i]=0;
+				temp[i]=imp.get(i,halfHeight);
+			}
+			while (temp[p1]==255){
+				p1=p1+1;
+			}
+		    while (temp[ep]==255){
+		    	ep=ep-1;
+		    }
+			while ((p1<ep)&&(p2<ep)){
+				if (p1<imp.getWidth()){
+				    while ((temp[p1]!=255)&&(p1<ep)){
+					    p1=p1+1;
+					    if (p1>=ep){
+					    	break;
+					    }
+				    }
+				}
+				p2=p1+1;
+				if (p2<ep){
+				    while (temp[p2]==255){
+					    p2=p2+1;
+					    if (p2>=ep){
+					    	break;
+					    }
+				    }
+		        }
+				if (p2-p1>5){
+					count=p2-p1;
+					HorizontalMeanSquare+=count*count;
+					flag=flag+1;
+				}
+				p1=p2;
+				p2=p1+1;
+			}
+			if (flag==0){
+				flag=1;
+			}
+			return HorizontalMeanSquare/flag;
+		}
+		public static double MeanSquareVertical(BinaryProcessor imp){
+			double VerticalMeanSquare=0.0;
+			int[] temp=new int[imp.getHeight()];
+			int halfWidth=imp.getWidth()/2;
+			int p1=0,p2=0,ep=imp.getHeight()-1;;
+			int count=0;
+			int flag=0;
+			for (int i=0;i<imp.getHeight();i++){
+				temp[i]=0;
+				temp[i]=imp.get(halfWidth,i);
+			}
+			while (temp[p1]==255){
+				p1=p1+1;
+			}
+		    while (temp[ep]==255){
+		    	ep=ep-1;
+		    }
+			while ((p1<ep)&&(p2<ep)){
+				if (p1<imp.getHeight()){
+				    while ((temp[p1]!=255)&&(p1<ep)){
+					    p1=p1+1;
+					    if (p1>=ep){
+					    	break;
+					    }
+				    }
+				}
+				p2=p1+1;
+				if (p2<ep){
+				    while (temp[p2]==255){
+					    p2=p2+1;
+					    if (p2>=ep){
+					    	break;
+					    }
+				    }
+		        }
+				if (p2-p1>5){
+					count=p2-p1;
+					VerticalMeanSquare+=count*count;
+					flag=flag+1;
+				}
+				p1=p2;
+				p2=p1+1;
+			}
+			if (flag==0){
+				flag=1;
+			}
+			return VerticalMeanSquare/flag;
+		}
+		
+		
+		/* 1. Aspect Ratio: Width/Height (Normalized by 3 to account for letters such as M) 
+		 * 2. CentroidX
+		 * 3. CentroidY
+		 * 4. Number of Pixel (Normalized by total after resizing the image)
+		 * 5. Mean Squared Value (Lengths of segments of horizontal cut [>6 pixels, halfway height])
+		 * 6. Mean Squared Value (Lengths of segments of vertical cut [>6 pixels, halfway width])
+		 * 7.
+		 */
 }
